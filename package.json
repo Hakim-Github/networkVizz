@@ -1,0 +1,44 @@
+{
+  "name": "networkvizz",
+  "version": "0.0.6-alpha.4",
+  "description": "Draw easy graphs or networks",
+  "main": "./dist/networkViz.js",
+  "scripts": {
+    "start": "npm run build-ts && npm run watch-ts",
+    "build:umd": "echo \"No umd.js yet\"",
+    "build:umd.min": "echo \"No umd.min.js yet\"",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "test": "karma start karma.config.js",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HakimMliki/networkVizz.git"
+  },
+  "author": "Hakim Mliki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HakimMliki/networkVizz/issues"
+  },
+  "homepage": "https://github.com/HakimMliki/networkVizz#readme",
+  "devDependencies": {
+    "@types/d3": "4.9.0",
+    "@types/jasmine": "2.5.53",
+    "@types/node": "7.0.21",
+    "jasmine-core": "2.6.4",
+    "karma": "1.7.0",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-ie-launcher": "1.0.0",
+    "karma-jasmine": "1.1.0",
+    "karma-typescript": "3.0.4",
+    "tslint": "5.2.0",
+    "typescript": "2.3.2"
+  },
+  "dependencies": {
+    "d3": "4.9.1",
+    "level-browserify": "~1.1.1",
+    "levelgraph": "~2.0.1",
+    "webcola": "3.3.5"
+  }
+}
