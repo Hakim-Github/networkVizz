@@ -54,16 +54,18 @@ Lets make prototyping graphs faster and more interactive!
 ## Quickstart using Webpack or another bundler
 
 ```shell
-npm install --save networkvizjs
+npm install --save networkvizz
+
+yarn add networkvizz
 ```
 
 Import the module:
 
 ```javascript
 // ES6
-import networkVizJS from "networkVizJS";
+import networkVizJS from "networkvizz";
 // commonjs
-var networkVizJS = require('networkVizJS').default;
+var networkVizJS = require('networkvizz').default;
 ```
 
 Given we have an div with id `graph1`, we can initiate
