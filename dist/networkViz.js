@@ -611,7 +611,6 @@ function networkVizJS(documentId, userLayoutOptions) {
         const subject = tripletObject.subject, predicate = tripletObject.predicate, object = tripletObject.object;
         // Check that predicate doesn't already exist
         new Promise((resolve, reject) => tripletsDB.get({ subject: subject.hash,
-            predicate: predicate.type,
             object: object.hash }, function (err, list) {
             if (err)
                 reject(err);
