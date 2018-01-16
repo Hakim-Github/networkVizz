@@ -149,13 +149,13 @@ function networkVizJS(documentId, userLayoutOptions) {
     function updatePathDimensions() {
         node.select("path")
             .attr("transform", function (d) {
-            // Scale appropriately using http://stackoverflow.com/a/9877871/6421793
-            const currentWidth = this.getBBox().width, w = d.width, currentHeight = this.getBBox().height, h = d.height, scaleW = w / currentWidth, scaleH = h / currentHeight;
-            if (isNaN(scaleW) || isNaN(scaleH) || isNaN(w) || isNaN(h)) {
-                return "";
-            }
-            return `translate(${-w / 2},${-h / 2}) scale(${scaleW},${scaleH})`;
-        });
+                // Scale appropriately using http://stackoverflow.com/a/9877871/6421793
+                const currentWidth = this.getBBox().width, w = d.width, currentHeight = this.getBBox().height, h = d.height, scaleW = w / currentWidth, scaleH = h / currentHeight;
+                if (isNaN(scaleW) || isNaN(scaleH) || isNaN(w) || isNaN(h)) {
+                    return "";
+                }
+                return `translate(${-w / 2},${-h / 2}) scale(${scaleW},${scaleH})`;
+            });
     }
     /**
      * This function re-centers the text.
@@ -167,46 +167,46 @@ function networkVizJS(documentId, userLayoutOptions) {
     function repositionText() {
         return Promise.resolve()
             .then(_ => {
-            node.select("text").each(function (d) {
-                const text = d3.select(this);
-                const margin = layoutOptions.margin, pad = layoutOptions.pad;
-                const extra = 2 * margin + 2 * pad;
-                // The width must reset to allow the box to get smaller.
-                // Later we will set width based on the widest tspan/line.
-                d.width = d.minWidth || 0;
-                if (!(d.width)) {
+                node.select("text").each(function (d) {
+                    const text = d3.select(this);
+                    const margin = layoutOptions.margin, pad = layoutOptions.pad;
+                    const extra = 2 * margin + 2 * pad;
+                    // The width must reset to allow the box to get smaller.
+                    // Later we will set width based on the widest tspan/line.
                     d.width = d.minWidth || 0;
-                }
-                // Loop over the tspans and recalculate the width based on the longest text.
-                text.selectAll("tspan").each(function (d) {
-                    const lineLength = this.getComputedTextLength();
-                    if (d.width < lineLength + extra) {
-                        d.width = lineLength + extra;
+                    if (!(d.width)) {
+                        d.width = d.minWidth || 0;
                     }
-                });
-            }).each(function (d) {
-                // Only update the height, the width is calculated
-                // by iterating over the tspans in the `wrap` function.
-                const b = this.getBBox();
-                const extra = 2 * margin + 2 * pad;
-                d.height = b.height + extra;
-            })
-                .attr("y", function (d) {
-                const b = d3.select(this).node().getBBox();
-                // Todo: Minus 2 is a hack to get the text feeling 'right'.
-                return d.height / 2 - b.height / 2 - 2;
-            })
-                .attr("x", function (d) {
-                // Apply the correct x value to the tspan.
-                const b = this.getBBox();
-                const x = d.width / 2 - b.width / 2;
-                d.textPosition = x;
-                // We don't set the tspans with an x attribute.
-                d3.select(this).selectAll("tspan")
-                    .attr("x", d.textPosition);
-                return d.textPosition;
+                    // Loop over the tspans and recalculate the width based on the longest text.
+                    text.selectAll("tspan").each(function (d) {
+                        const lineLength = this.getComputedTextLength();
+                        if (d.width < lineLength + extra) {
+                            d.width = lineLength + extra;
+                        }
+                    });
+                }).each(function (d) {
+                    // Only update the height, the width is calculated
+                    // by iterating over the tspans in the `wrap` function.
+                    const b = this.getBBox();
+                    const extra = 2 * margin + 2 * pad;
+                    d.height = b.height + extra;
+                })
+                    .attr("y", function (d) {
+                        const b = d3.select(this).node().getBBox();
+                        // Todo: Minus 2 is a hack to get the text feeling 'right'.
+                        return d.height / 2 - b.height / 2 - 2;
+                    })
+                    .attr("x", function (d) {
+                        // Apply the correct x value to the tspan.
+                        const b = this.getBBox();
+                        const x = d.width / 2 - b.width / 2;
+                        d.textPosition = x;
+                        // We don't set the tspans with an x attribute.
+                        d3.select(this).selectAll("tspan")
+                            .attr("x", d.textPosition);
+                        return d.textPosition;
+                    });
             });
-        });
     }
     /**
      * Update the d3 visuals without layout changes.
@@ -270,33 +270,33 @@ function networkVizJS(documentId, userLayoutOptions) {
                 .text(undefined)
                 .attr("class", d => d.class)
                 .each(function (d) {
-                // This function takes the text element.
-                // We can call .each on it and build up
-                // the tspan elements from the array of text
-                // in the data.
-                // Derived from https://bl.ocks.org/mbostock/7555321
-                const margin = layoutOptions.margin, pad = layoutOptions.pad;
-                const extra = 2 * margin + 2 * pad;
-                const text = d3.select(this);
-                /**
-                 * If no shortname, then use hash.
-                 */
-                let tempText = d.shortname || d.hash;
-                if (!Array.isArray(tempText)) {
-                    tempText = [tempText];
-                }
-                const textCopy = tempText.slice(), words = textCopy.reverse(), lineheight = 1.1, // em
-                lineNumber = 0, dy = parseFloat(text.attr("dy")) || 0;
-                let word,
-                // TODO: I don't know why there needs to be a undefined tspan at the start?
-                tspan = text.text(undefined).append("tspan").attr("dy", dy + "em");
-                while (word = words.pop()) {
-                    tspan = text.append("tspan")
-                        .attr("dy", lineheight + "em")
-                        .attr("x", d.textPosition || (d.width / 2) || 0)
-                        .text(word);
-                }
-            })
+                    // This function takes the text element.
+                    // We can call .each on it and build up
+                    // the tspan elements from the array of text
+                    // in the data.
+                    // Derived from https://bl.ocks.org/mbostock/7555321
+                    const margin = layoutOptions.margin, pad = layoutOptions.pad;
+                    const extra = 2 * margin + 2 * pad;
+                    const text = d3.select(this);
+                    /**
+                     * If no shortname, then use hash.
+                     */
+                    let tempText = d.shortname || d.hash;
+                    if (!Array.isArray(tempText)) {
+                        tempText = [tempText];
+                    }
+                    const textCopy = tempText.slice(), words = textCopy.reverse(), lineheight = 1.1, // em
+                        lineNumber = 0, dy = parseFloat(text.attr("dy")) || 0;
+                    let word,
+                        // TODO: I don't know why there needs to be a undefined tspan at the start?
+                        tspan = text.text(undefined).append("tspan").attr("dy", dy + "em");
+                    while (word = words.pop()) {
+                        tspan = text.append("tspan")
+                            .attr("dy", lineheight + "em")
+                            .attr("x", d.textPosition || (d.width / 2) || 0)
+                            .text(word);
+                    }
+                })
                 .attr("pointer-events", "none");
             /**
              * Here we can update node properties that have already been attached.
@@ -384,117 +384,117 @@ function networkVizJS(documentId, userLayoutOptions) {
             .then(updateStyles)
             .then(repositionText)
             .then(_ => {
-            /**
-             * Helper function for drawing the lines.
-             */
-            const lineFunction = d3.line()
-                .x(d => d.x)
-                .y(d => d.y);
-            /**
-             * Causes the links to bend around the rectangles.
-             * Source: https://github.com/tgdwyer/WebCola/blob/master/WebCola/examples/unix.html#L140
-             */
-            const routeEdges = function () {
-                if (links.length == 0 || !layoutOptions.enableEdgeRouting) {
-                    return;
-                }
-                try {
-                    simulation.prepareEdgeRouting();
-                }
-                catch (err) {
-                    console.error(err);
-                    return;
-                }
-                try {
-                    link.select("path").attr("d", d => lineFunction(simulation.routeEdge(d, undefined)));
-                }
-                catch (err) {
-                    console.error(err);
-                    return;
-                }
-                try {
-                    if (isIE())
-                        link.select("path").each(function (d) { this.parentNode.insertBefore(this, this); });
-                }
-                catch (err) {
-                    console.log(err);
-                    return;
-                }
-                link.select("text").attr("x", d => {
-                    const arrayX = simulation.routeEdge(d, undefined);
-                    const middleIndex = Math.floor(arrayX.length / 2) - 1;
-                    return (arrayX[middleIndex].x + arrayX[middleIndex + 1].x) / 2;
-                }).attr("y", d => {
-                    const arrayY = simulation.routeEdge(d, undefined);
-                    const middleIndex = Math.floor(arrayY.length / 2) - 1;
-                    return (arrayY[middleIndex].y + arrayY[middleIndex + 1].y) / 2;
-                });
-            };
-            // Restart the simulation.
-            simulation.links(links) // Required because we create new link lists
-                .groups(groups)
-                .start(10, 15, 20).on("tick", function () {
-                node.each((d) => {
-                    if (d.bounds) {
-                        // Initiate the innerBounds, and create it based on the width and height
-                        // of the node.
-                        d.innerBounds = d.bounds.inflate(0);
-                        d.innerBounds.X = d.innerBounds.x + d.width;
-                        d.innerBounds.Y = d.innerBounds.y + d.height;
+                /**
+                 * Helper function for drawing the lines.
+                 */
+                const lineFunction = d3.line()
+                    .x(d => d.x)
+                    .y(d => d.y);
+                /**
+                 * Causes the links to bend around the rectangles.
+                 * Source: https://github.com/tgdwyer/WebCola/blob/master/WebCola/examples/unix.html#L140
+                 */
+                const routeEdges = function () {
+                    if (links.length == 0 || !layoutOptions.enableEdgeRouting) {
+                        return;
                     }
-                });
-                node.attr("transform", d => d.innerBounds ?
-                    `translate(${d.innerBounds.x},${d.innerBounds.y})`
-                    : `translate(${d.x},${d.y})`);
-                updatePathDimensions();
-                link.select("path").attr("d", d => {
-                    let route;
                     try {
-                        route = cola.makeEdgeBetween(d.source.innerBounds, d.target.innerBounds, 5);
+                        simulation.prepareEdgeRouting();
                     }
                     catch (err) {
                         console.error(err);
                         return;
                     }
-                    return lineFunction([route.sourceIntersection, route.arrowStart]);
-                });
-                if (isIE())
-                    link.each(function (d) { this.parentNode.insertBefore(this, this); });
-                link.select("text")
-                    .attr("x", d => {
-                    let route;
                     try {
-                        route = cola.makeEdgeBetween(d.source.innerBounds, d.target.innerBounds, 5);
+                        link.select("path").attr("d", d => lineFunction(simulation.routeEdge(d, undefined)));
                     }
                     catch (err) {
                         console.error(err);
-                        return 0;
+                        return;
                     }
-                    return (route.sourceIntersection.x + route.targetIntersection.x) / 2;
-                })
-                    .attr("y", d => {
-                    let route;
                     try {
-                        route = cola.makeEdgeBetween(d.source.innerBounds, d.target.innerBounds, 5);
+                        if (isIE())
+                            link.select("path").each(function (d) { this.parentNode.insertBefore(this, this); });
                     }
                     catch (err) {
-                        console.error(err);
-                        return 0;
+                        console.log(err);
+                        return;
                     }
-                    return (route.sourceIntersection.y + route.targetIntersection.y) / 2;
-                });
-                group.attr("x", function (d) { return d.bounds.x; })
-                    .attr("y", function (d) { return d.bounds.y; })
-                    .attr("width", function (d) { return d.bounds.width(); })
-                    .attr("height", function (d) { return d.bounds.height(); });
-            }).on("end", routeEdges);
-            function isIE() { return ((navigator.appName == "Microsoft Internet Explorer") || ((navigator.appName == "Netscape") && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != undefined))); }
-            // After a tick make sure to add translation to the nodes.
-            // Sometimes it wasn"t added in a single tick.
-            node.attr("transform", d => d.innerBounds ?
-                `translate(${d.innerBounds.x},${d.innerBounds.y})`
-                : `translate(${d.x},${d.y})`);
-        })
+                    link.select("text").attr("x", d => {
+                        const arrayX = simulation.routeEdge(d, undefined);
+                        const middleIndex = Math.floor(arrayX.length / 2) - 1;
+                        return (arrayX[middleIndex].x + arrayX[middleIndex + 1].x) / 2;
+                    }).attr("y", d => {
+                        const arrayY = simulation.routeEdge(d, undefined);
+                        const middleIndex = Math.floor(arrayY.length / 2) - 1;
+                        return (arrayY[middleIndex].y + arrayY[middleIndex + 1].y) / 2;
+                    });
+                };
+                // Restart the simulation.
+                simulation.links(links) // Required because we create new link lists
+                    .groups(groups)
+                    .start(10, 15, 20).on("tick", function () {
+                    node.each((d) => {
+                        if (d.bounds) {
+                            // Initiate the innerBounds, and create it based on the width and height
+                            // of the node.
+                            d.innerBounds = d.bounds.inflate(0);
+                            d.innerBounds.X = d.innerBounds.x + d.width;
+                            d.innerBounds.Y = d.innerBounds.y + d.height;
+                        }
+                    });
+                    node.attr("transform", d => d.innerBounds ?
+                        `translate(${d.innerBounds.x},${d.innerBounds.y})`
+                        : `translate(${d.x},${d.y})`);
+                    updatePathDimensions();
+                    link.select("path").attr("d", d => {
+                        let route;
+                        try {
+                            route = cola.makeEdgeBetween(d.source.innerBounds, d.target.innerBounds, 5);
+                        }
+                        catch (err) {
+                            console.error(err);
+                            return;
+                        }
+                        return lineFunction([route.sourceIntersection, route.arrowStart]);
+                    });
+                    if (isIE())
+                        link.each(function (d) { this.parentNode.insertBefore(this, this); });
+                    link.select("text")
+                        .attr("x", d => {
+                            let route;
+                            try {
+                                route = cola.makeEdgeBetween(d.source.innerBounds, d.target.innerBounds, 5);
+                            }
+                            catch (err) {
+                                console.error(err);
+                                return 0;
+                            }
+                            return (route.sourceIntersection.x + route.targetIntersection.x) / 2;
+                        })
+                        .attr("y", d => {
+                            let route;
+                            try {
+                                route = cola.makeEdgeBetween(d.source.innerBounds, d.target.innerBounds, 5);
+                            }
+                            catch (err) {
+                                console.error(err);
+                                return 0;
+                            }
+                            return (route.sourceIntersection.y + route.targetIntersection.y) / 2;
+                        });
+                    group.attr("x", function (d) { return d.bounds.x; })
+                        .attr("y", function (d) { return d.bounds.y; })
+                        .attr("width", function (d) { return d.bounds.width(); })
+                        .attr("height", function (d) { return d.bounds.height(); });
+                }).on("end", routeEdges);
+                function isIE() { return ((navigator.appName == "Microsoft Internet Explorer") || ((navigator.appName == "Netscape") && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != undefined))); }
+                // After a tick make sure to add translation to the nodes.
+                // Sometimes it wasn"t added in a single tick.
+                node.attr("transform", d => d.innerBounds ?
+                    `translate(${d.innerBounds.x},${d.innerBounds.y})`
+                    : `translate(${d.x},${d.y})`);
+            })
             .then(() => typeof callback === "function" && callback());
     }
     // Helper function for updating links after node mutations.
